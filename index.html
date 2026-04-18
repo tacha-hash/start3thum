@@ -574,7 +574,19 @@ function mvUpdateChat() {
 }
 
 // === VOTES — API-backed + localStorage fallback ===
-const VOTE_API = 'https://webhook-relay.louracle.workers.dev/api/vote';
+// === RATE LIMITER ===
+const _rl = {};
+function rateLimit(key, cooldownMs=5000) {
+  const now = Date.now();
+  if (_rl[key] && now - _rl[key] < cooldownMs) return false;
+  _rl[key] = now;
+  return true;
+}
+
+// API base — obfuscated
+const _h=[119,101,98,104,111,111,107,45,114,101,108,97,121,46,108,111,117,114,97,99,108,101,46,119,111,114,107,101,114,115,46,100,101,118];
+const _B='https://'+_h.map(c=>String.fromCharCode(c)).join('')+'/api/';
+const VOTE_API = _B+'vote';
 let voteData = {};
 function getISOWeek() {
   const d = new Date(); d.setHours(0,0,0,0);
@@ -599,6 +611,7 @@ async function fetchVotes() {
 
 async function vote(id) {
   if (votedThisWeek) return;
+  if (!rateLimit('vote', 3000)) return;
   votedThisWeek = true;
   localStorage.setItem('s3t_voted_week', getISOWeek());
   try {
@@ -803,7 +816,7 @@ function updateCountdown() {
 }
 
 // === AUTO LIVE CHECK ===
-const LIVE_API = 'https://webhook-relay.louracle.workers.dev/api/live';
+const LIVE_API = _B+'live';
 async function checkLiveStatus() {
   try {
     const r = await fetch(LIVE_API); if(!r.ok) throw 0;
@@ -831,7 +844,7 @@ checkLiveStatus(); setInterval(checkLiveStatus, 30000);
 
 // === INIT ===
 // === GAME SUGGESTIONS + STEAM SEARCH ===
-const STEAM_API = 'https://webhook-relay.louracle.workers.dev/api/steam-search';
+const STEAM_API = _B+'steam-search';
 let searchTimer = null;
 
 function debounceSteamSearch() {
@@ -873,6 +886,7 @@ async function searchSteam() {
 function getSuggestions() { try { return JSON.parse(localStorage.getItem('s3t_suggestions')||'[]'); } catch { return []; } }
 
 async function suggestGame(name, appId, img, price) {
+  if (!rateLimit('suggest', 10000)) { const s=document.getElementById('suggest-status'); s.textContent='รอสักครู่ก่อนเสนอใหม่'; s.classList.remove('hidden'); return; }
   document.getElementById('suggest-input').value = '';
   document.getElementById('steam-results').classList.add('hidden');
 
@@ -934,6 +948,7 @@ async function submitReport() {
   const name = document.getElementById('report-name').value.trim() || 'ไม่ระบุ';
   const text = document.getElementById('report-text').value.trim();
   if (!text) return;
+  if (!rateLimit('report', 30000)) { const s=document.getElementById('report-status'); s.textContent='รอ 30 วินาทีก่อนส่ง feedback ใหม่'; s.classList.remove('hidden'); return; }
 
   const report = { name, type: reportType, text, time: new Date().toISOString() };
 
