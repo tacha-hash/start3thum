@@ -468,9 +468,100 @@ function setOffline(channelKey) {
   }
 }
 
-// === DEMO: uncomment to test with a real video ===
-// setLive('louis', 'dQw4w9WgXcQ');
-// setLive('kk', ''); // Twitch auto-embeds if twitchUser is set
+// === AUTO LIVE CHECK ===
+// Twitch: always enable — embed shows live/offline automatically
+CHANNELS.kk.videoId = 'auto';
+
+// YouTube: check /live page for each channel
+async function checkYouTubeLive() {
+  const ytChannels = {
+    louis: 'saytanaa',
+    job: 'j3chachannel',
+    geng: 'GenghisKhanz'
+  };
+  for (const [key, handle] of Object.entries(ytChannels)) {
+    try {
+      // Use oembed to get video info from /live URL
+      const res = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/@${handle}/live&format=json`);
+      if (res.ok) {
+        const data = await res.json();
+        // Extract video ID from thumbnail URL as fallback
+        const thumbMatch = data.thumbnail_url?.match(/\/vi\/([^/]+)\//);
+        if (thumbMatch) {
+          // Store channel handle for embed URL
+          CHANNELS[key].handle = handle;
+          CHANNELS[key].latestVideoId = thumbMatch[1];
+        }
+      }
+    } catch {}
+  }
+}
+
+// Override switchStream to handle Twitch auto-embed
+const _origSwitch = switchStream;
+switchStream = function(channelKey) {
+  const ch = CHANNELS[channelKey];
+  if (!ch) return;
+
+  const player = document.getElementById('stream-player');
+  const badge = document.getElementById('stream-badge');
+  const badgeName = document.getElementById('stream-badge-name');
+
+  // Update tab styles
+  document.querySelectorAll('.channel-tab').forEach(tab => {
+    const isActive = tab.dataset.channel === channelKey;
+    tab.classList.toggle('border-cyan-500/60', isActive && ch.color === 'cyan');
+    tab.classList.toggle('border-purple-500/60', isActive && ch.color === 'purple');
+    tab.classList.toggle('bg-dark-700', isActive);
+    tab.classList.toggle('bg-dark-800/50', !isActive);
+  });
+
+  let embedHtml = '';
+
+  if (ch.platform === 'twitch') {
+    // Twitch: always embed — player handles live/offline state
+    embedHtml = `<iframe src="https://player.twitch.tv/?channel=${ch.twitchUser}&parent=${location.hostname}&autoplay=true"
+      class="w-full aspect-video" frameborder="0" allowfullscreen></iframe>`;
+  } else if (ch.platform === 'youtube') {
+    if (ch.videoId && ch.videoId !== '') {
+      // Has explicit live video ID
+      embedHtml = `<iframe src="https://www.youtube.com/embed/${ch.videoId}?autoplay=1&rel=0"
+        class="w-full aspect-video" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>`;
+    } else if (ch.handle) {
+      // Try live embed via channel handle — YouTube will show live if streaming, or latest video
+      embedHtml = `<iframe src="https://www.youtube.com/embed?listType=user_uploads&list=${ch.handle}&autoplay=1&rel=0"
+        class="w-full aspect-video" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>`;
+    }
+  }
+
+  if (embedHtml) {
+    player.innerHTML = embedHtml;
+    badge.classList.remove('hidden');
+    badgeName.textContent = ch.name;
+  } else {
+    // Fallback placeholder
+    const channelUrl = ch.platform === 'twitch' ? 'https://twitch.tv/thiskk' :
+      `https://youtube.com/@${ch.handle || 'saytanaa'}`;
+    player.innerHTML = `<div class="aspect-video flex items-center justify-center">
+      <div class="text-center">
+        <img src="assets/profiles/${channelKey}.png" alt="${ch.name}"
+          class="w-20 h-20 rounded-full mx-auto mb-4 opacity-40 profile-ring">
+        <p class="text-gray-400 text-sm font-medium">${ch.name}</p>
+        <p class="text-gray-600 text-xs mt-1">Not live</p>
+        <a href="${channelUrl}" target="_blank"
+          class="inline-block mt-3 text-xs text-cyan-500 hover:text-cyan-400 transition-colors">Visit Channel →</a>
+      </div>
+    </div>`;
+    badge.classList.add('hidden');
+  }
+  activeStream = channelKey;
+};
+
+checkYouTubeLive();
 
 // === INIT ===
 renderVotes(); renderSchedule(); renderRecommend(); updateCountdown();
