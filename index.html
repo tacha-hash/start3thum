@@ -521,15 +521,46 @@ function mvUpdateChat() {
   document.getElementById('mv-chat-frame').innerHTML = chat || '<div class="flex items-center justify-center h-full text-gray-600 text-xs">No chat available</div>';
 }
 
-// === VOTES ===
-function getVotes() { try { return JSON.parse(localStorage.getItem('s3t_votes')||'{}'); } catch { return {}; } }
-function saveVotes(v) { localStorage.setItem('s3t_votes', JSON.stringify(v)); }
-function hasVoted() { return localStorage.getItem('s3t_voted')==='true'; }
-function vote(id) { if(hasVoted()) return; const v=getVotes(); v[id]=(v[id]||0)+1; saveVotes(v); localStorage.setItem('s3t_voted','true'); renderVotes(); }
+// === VOTES — API-backed + localStorage fallback ===
+const VOTE_API = 'https://webhook-relay.louracle.workers.dev/api/vote';
+let voteData = {};
+function getISOWeek() {
+  const d = new Date(); d.setHours(0,0,0,0);
+  d.setDate(d.getDate()+3-(d.getDay()+6)%7);
+  const w = Math.ceil((((d-new Date(d.getFullYear(),0,4))/864e5)+1)/7);
+  return `${d.getFullYear()}-W${String(w).padStart(2,'0')}`;
+}
+let votedThisWeek = localStorage.getItem('s3t_voted_week') === getISOWeek();
+function hasVoted() { return votedThisWeek; }
+
+async function fetchVotes() {
+  try {
+    const r = await fetch(`${VOTE_API}?week=current`);
+    if (!r.ok) throw 0;
+    const d = await r.json();
+    voteData = d.votes || {};
+  } catch {
+    voteData = JSON.parse(localStorage.getItem('s3t_votes')||'{}');
+  }
+  renderVotes();
+}
+
+async function vote(id) {
+  if (votedThisWeek) return;
+  votedThisWeek = true;
+  localStorage.setItem('s3t_voted_week', getISOWeek());
+  try {
+    const r = await fetch(VOTE_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({gameId:id}) });
+    if (r.ok) { await fetchVotes(); return; }
+  } catch {}
+  voteData[id] = (voteData[id]||0)+1;
+  localStorage.setItem('s3t_votes', JSON.stringify(voteData));
+  renderVotes();
+}
 
 // Vote — compact cards with detail popup
 function renderVotes() {
-  const votes=getVotes(), voted=hasVoted(), total=Object.values(votes).reduce((a,b)=>a+b,0);
+  const votes=voteData, voted=hasVoted(), total=Object.values(votes).reduce((a,b)=>a+b,0);
   document.getElementById('vote-grid').innerHTML = GAMES.map((g,i) => {
     const c=votes[g.id]||0, pct=total>0?Math.round(c/total*100):0;
     const tc = g.tag==='ฟรี'?'bg-accent-green/20 text-accent-green':g.tag?'bg-cyan-500/20 text-cyan-400':'';
@@ -692,7 +723,7 @@ async function checkLiveStatus() {
 checkLiveStatus(); setInterval(checkLiveStatus, 30000);
 
 // === INIT ===
-renderVotes(); renderCalendar(); renderRecommend(); updateCountdown();
+fetchVotes(); renderCalendar(); renderRecommend(); updateCountdown();
 setInterval(updateCountdown, 1000);
 </script>
 </body>
