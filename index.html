@@ -143,38 +143,10 @@
             <img src="assets/profiles/kk.png" class="w-7 h-7 rounded-full object-cover" loading="lazy"><span>เค</span><span class="live-dot-s hidden w-2 h-2 rounded-full bg-purple-500 live-pulse"></span>
           </button>
         </div>
-        <div class="flex gap-3">
-          <div class="flex-1 rounded-2xl overflow-hidden border border-dark-600/30 bg-dark-900 glow-cyan aspect-video" id="home-stream">
-            <div class="w-full h-full flex items-center justify-center">
-              <p class="text-gray-500 text-sm">กดเลือกช่องด้านบน</p>
-            </div>
+        <div class="rounded-2xl overflow-hidden border border-dark-600/30 bg-dark-900 glow-cyan aspect-video" id="home-stream">
+          <div class="w-full h-full flex items-center justify-center">
+            <p class="text-gray-500 text-sm">กดเลือกช่องด้านบน</p>
           </div>
-          <div class="w-[340px] hidden lg:flex flex-col rounded-2xl overflow-hidden border border-dark-600/30 bg-dark-800/50 aspect-video" id="home-chat-wrap">
-            <div class="flex items-center gap-1 px-2 py-1.5 border-b border-dark-600/20 overflow-x-auto">
-              <span class="text-[10px] text-gray-500 tracking-wider mr-1">แชท:</span>
-              <button onclick="switchChat('louis')" data-chat="louis" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-cyan-400 cursor-pointer">หลุยส์</button>
-              <button onclick="switchChat('job')" data-chat="job" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-cyan-400 cursor-pointer">แปะ</button>
-              <button onclick="switchChat('geng')" data-chat="geng" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-cyan-400 cursor-pointer">เจง</button>
-              <button onclick="switchChat('kk')" data-chat="kk" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-purple-400 cursor-pointer">เค</button>
-            </div>
-            <div class="flex-1" id="home-chat"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Calendar Schedule — ถัดจาก Live เลย -->
-      <section>
-        <h2 class="font-display text-sm tracking-widest text-accent-green uppercase mb-4">ตาราง</h2>
-        <div class="bg-dark-800/50 rounded-2xl border border-dark-600/30 overflow-hidden backdrop-blur p-4">
-          <div class="flex items-center justify-between mb-3">
-            <button onclick="calPrev()" class="text-gray-500 hover:text-cyan-400 px-2 cursor-pointer">&lt;</button>
-            <span class="font-display text-sm tracking-wider text-gray-300" id="cal-month"></span>
-            <button onclick="calNext()" class="text-gray-500 hover:text-cyan-400 px-2 cursor-pointer">&gt;</button>
-          </div>
-          <div class="grid grid-cols-7 gap-1 text-center text-[10px] text-gray-500 mb-2">
-            <span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span>
-          </div>
-          <div class="grid grid-cols-7 gap-1" id="cal-grid"></div>
         </div>
       </section>
 
