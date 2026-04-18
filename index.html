@@ -184,15 +184,18 @@
         </div>
       </section>
 
-      <!-- เสนอเกมส์ -->
+      <!-- เสนอเกมส์ — ค้นหาจาก Steam -->
       <section>
         <h2 class="font-display text-sm tracking-widest text-accent-green uppercase mb-4">เสนอเกมส์อาทิตย์หน้า</h2>
         <div class="bg-dark-800/50 rounded-2xl border border-dark-600/30 p-5">
-          <p class="text-gray-400 text-sm mb-4">อยากให้เล่นเกมส์อะไร? พิมพ์ชื่อเกมส์แล้วกดส่งได้เลย!</p>
+          <p class="text-gray-400 text-sm mb-4">ค้นหาเกมส์จาก Steam แล้วเสนอได้เลย!</p>
           <div class="flex gap-2">
-            <input id="suggest-input" type="text" placeholder="ชื่อเกมส์..." class="flex-1 bg-dark-900 border border-dark-600/30 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:border-cyan-500/50 focus:outline-none">
-            <button onclick="submitSuggestion()" class="px-5 py-2.5 rounded-xl bg-accent-green/20 text-accent-green text-sm font-medium hover:bg-accent-green/30 border border-accent-green/20 cursor-pointer">ส่ง</button>
+            <input id="suggest-input" type="text" placeholder="พิมพ์ชื่อเกมส์ค้นหา..." class="flex-1 bg-dark-900 border border-dark-600/30 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:border-cyan-500/50 focus:outline-none" oninput="debounceSteamSearch()">
+            <button onclick="searchSteam()" class="px-5 py-2.5 rounded-xl bg-accent-green/20 text-accent-green text-sm font-medium hover:bg-accent-green/30 border border-accent-green/20 cursor-pointer">ค้นหา</button>
           </div>
+          <!-- Steam search results -->
+          <div id="steam-results" class="mt-3 space-y-2 hidden"></div>
+          <!-- Submitted suggestions -->
           <div id="suggest-list" class="mt-4 space-y-2"></div>
           <p id="suggest-status" class="text-xs text-gray-600 mt-2 hidden"></p>
         </div>
@@ -827,25 +830,60 @@ async function checkLiveStatus() {
 checkLiveStatus(); setInterval(checkLiveStatus, 30000);
 
 // === INIT ===
-// === GAME SUGGESTIONS ===
-const SUGGEST_API = 'https://webhook-relay.louracle.workers.dev/api/vote';
+// === GAME SUGGESTIONS + STEAM SEARCH ===
+const STEAM_API = 'https://webhook-relay.louracle.workers.dev/api/steam-search';
+let searchTimer = null;
+
+function debounceSteamSearch() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(searchSteam, 400);
+}
+
+async function searchSteam() {
+  const q = document.getElementById('suggest-input').value.trim();
+  const el = document.getElementById('steam-results');
+  if (!q || q.length < 2) { el.classList.add('hidden'); return; }
+
+  el.innerHTML = '<p class="text-xs text-gray-500">กำลังค้นหา...</p>';
+  el.classList.remove('hidden');
+
+  try {
+    const r = await fetch(`${STEAM_API}?q=${encodeURIComponent(q)}`);
+    if (!r.ok) throw 0;
+    const d = await r.json();
+    if (!d.results?.length) { el.innerHTML = '<p class="text-xs text-gray-500">ไม่พบเกมส์</p>'; return; }
+    el.innerHTML = d.results.slice(0, 5).map(g => `
+      <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-dark-700/50 cursor-pointer transition-colors" onclick="suggestGame('${g.name.replace(/'/g,"\\'")}','${g.appId}','${g.img}','${g.price||''}')">
+        <img src="${g.img}" class="w-20 h-12 object-cover rounded-lg flex-shrink-0" loading="lazy" onerror="this.style.display='none'">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium truncate">${g.name}</p>
+          <p class="text-[10px] text-gray-500">${g.price || 'ฟรี'}</p>
+        </div>
+        <span class="text-xs text-accent-green flex-shrink-0">เสนอ →</span>
+      </div>`).join('');
+  } catch {
+    // API not ready — fallback to text submit
+    el.innerHTML = `<div class="flex items-center gap-2 p-2 rounded-xl hover:bg-dark-700/50 cursor-pointer" onclick="suggestGame('${q.replace(/'/g,"\\'")}')">
+      <span class="text-sm text-gray-300">เสนอ "${q}" (ไม่มีรูป)</span>
+      <span class="text-xs text-accent-green">ส่ง →</span>
+    </div>`;
+  }
+}
 
 function getSuggestions() { try { return JSON.parse(localStorage.getItem('s3t_suggestions')||'[]'); } catch { return []; } }
 
-async function submitSuggestion() {
-  const input = document.getElementById('suggest-input');
-  const name = input.value.trim();
-  if (!name) return;
-  input.value = '';
+async function suggestGame(name, appId, img, price) {
+  document.getElementById('suggest-input').value = '';
+  document.getElementById('steam-results').classList.add('hidden');
 
-  // Store locally
+  const suggestion = { name, appId, img, price, time: new Date().toISOString() };
   const suggestions = getSuggestions();
-  suggestions.unshift({ name, time: new Date().toISOString() });
+  suggestions.unshift(suggestion);
   localStorage.setItem('s3t_suggestions', JSON.stringify(suggestions.slice(0, 50)));
 
-  // Try API (use vote endpoint with special prefix)
+  // Send to API
   try {
-    await fetch(SUGGEST_API, {
+    await fetch(VOTE_API, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ gameId: 'suggest:'+name, voter: 'viewer' })
@@ -854,7 +892,7 @@ async function submitSuggestion() {
 
   renderSuggestions();
   const status = document.getElementById('suggest-status');
-  status.textContent = `"${name}" ส่งแล้ว! ขอบคุณครับ`;
+  status.textContent = `"${name}" เสนอแล้ว! ขอบคุณครับ`;
   status.classList.remove('hidden');
   setTimeout(() => status.classList.add('hidden'), 3000);
 }
@@ -863,17 +901,17 @@ function renderSuggestions() {
   const list = getSuggestions();
   const el = document.getElementById('suggest-list');
   if (!list.length) { el.innerHTML = ''; return; }
-  el.innerHTML = list.slice(0, 10).map(s =>
-    `<div class="flex items-center gap-2 text-sm">
-      <span class="w-1.5 h-1.5 rounded-full bg-accent-green/50 flex-shrink-0"></span>
-      <span class="text-gray-300">${s.name}</span>
-      <span class="text-[10px] text-gray-600">${new Date(s.time).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}</span>
+  el.innerHTML = '<p class="text-[10px] text-gray-500 mb-2">เกมส์ที่เสนอมา:</p>' + list.slice(0, 10).map(s =>
+    `<div class="flex items-center gap-3 text-sm">
+      ${s.img ? `<img src="${s.img}" class="w-12 h-7 object-cover rounded flex-shrink-0" loading="lazy" onerror="this.style.display='none'">` : '<span class="w-1.5 h-1.5 rounded-full bg-accent-green/50 flex-shrink-0"></span>'}
+      <span class="text-gray-300 flex-1 truncate">${s.name}</span>
+      ${s.price ? `<span class="text-[10px] text-gray-600">${s.price}</span>` : ''}
+      <span class="text-[10px] text-gray-700">${new Date(s.time).toLocaleTimeString('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'})}</span>
     </div>`
   ).join('');
 }
 
-// Enter key to submit
-document.getElementById('suggest-input')?.addEventListener('keydown', e => { if(e.key==='Enter') submitSuggestion(); });
+document.getElementById('suggest-input')?.addEventListener('keydown', e => { if(e.key==='Enter') searchSteam(); });
 
 // === REPORTS ===
 let reportType = 'feature';
