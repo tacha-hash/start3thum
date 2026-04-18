@@ -337,9 +337,9 @@
 const NEXT_SESSION = { date: new Date('2026-04-19T21:00:00+07:00'), game: 'PEAK', desc: 'Co-op climbing chaos' };
 
 const CHANNELS = {
-  louis: { name:'หลุยส์', platform:'youtube', videoId:'', handle:'saytanaa', color:'cyan' },
-  job:   { name:'แปะ',   platform:'youtube', videoId:'', handle:'j3chachannel', color:'cyan' },
-  geng:  { name:'เจง',   platform:'youtube', videoId:'', handle:'GenghisKhanz', twitchUser:'genghiskhanz', color:'cyan' },
+  louis: { name:'หลุยส์', platform:'youtube', videoId:'', handle:'saytanaa', channelId:'UCN868jOHHyoNmreGDLgOTwg', color:'cyan' },
+  job:   { name:'แปะ',   platform:'youtube', videoId:'', handle:'j3chachannel', channelId:'UC0d4hhkjnZz7k7VDlDVpyxQ', color:'cyan' },
+  geng:  { name:'เจง',   platform:'youtube', videoId:'', handle:'GenghisKhanz', channelId:'UCAJhVDKr0d2ulIiHviMacag', twitchUser:'genghiskhanz', color:'cyan' },
   kk:    { name:'เค',    platform:'twitch',  twitchUser:'thiskk', videoId:'', color:'purple' },
 };
 
@@ -382,8 +382,12 @@ function setView(v) {
 }
 
 // === EMBED HELPERS ===
-function ytEmbed(videoId, mute=false) {
-  return `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0${mute?'&mute=1':''}" class="w-full h-full" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>`;
+function ytEmbed(videoId, mute=false, channelId=null) {
+  // Use channel live_stream embed (shows actual live, not recommended videos)
+  if (channelId) {
+    return `<iframe src="https://www.youtube.com/embed/live_stream?channel=${channelId}&autoplay=1&rel=0&modestbranding=1${mute?'&mute=1':''}" class="w-full h-full" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>`;
+  }
+  return `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1${mute?'&mute=1':''}" class="w-full h-full" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>`;
 }
 function twEmbed(user, mute=false) {
   return `<iframe src="https://player.twitch.tv/?channel=${user}&parent=${location.hostname}&autoplay=true${mute?'&muted=true':''}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>`;
@@ -395,14 +399,15 @@ function twChat(user) {
   return `<iframe src="https://www.twitch.tv/embed/${user}/chat?parent=${location.hostname}&darkpopout" class="w-full h-full" frameborder="0"></iframe>`;
 }
 function getEmbed(ch, mute=false) {
-  // YouTube live takes priority, fallback to Twitch if available
-  if (ch.videoId && ch.videoId!=='auto' && ch.videoId!=='') return ytEmbed(ch.videoId, mute);
-  if (ch.platform==='twitch' || ch.twitchUser) return twEmbed(ch.twitchUser, mute);
+  // YouTube: use channel live_stream embed (no random recommended videos)
+  if (ch.platform==='youtube' && ch.live && ch.channelId) return ytEmbed(ch.videoId, mute, ch.channelId);
+  // Twitch: always embed via username
+  if (ch.twitchUser) return twEmbed(ch.twitchUser, mute);
   return null;
 }
 function getChat(ch) {
-  if (ch.videoId && ch.videoId!=='auto' && ch.videoId!=='') return ytChat(ch.videoId);
-  if (ch.platform==='twitch' || ch.twitchUser) return twChat(ch.twitchUser);
+  if (ch.platform==='youtube' && ch.videoId && ch.live) return ytChat(ch.videoId);
+  if (ch.twitchUser) return twChat(ch.twitchUser);
   return null;
 }
 function placeholder(key, ch) {
