@@ -213,6 +213,15 @@
         </div>
       </div>
 
+      <!-- Live Chat -->
+      <div class="mt-3 rounded-2xl overflow-hidden border border-dark-600/30 bg-dark-800/50 hidden" id="chat-container">
+        <div class="flex items-center justify-between px-4 py-2 border-b border-dark-600/20">
+          <span class="text-xs text-gray-400 tracking-wider uppercase font-display">Live Chat</span>
+          <button onclick="toggleChat()" class="text-xs text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer" id="chat-toggle-btn">Hide</button>
+        </div>
+        <div id="chat-player" class="transition-all duration-300" style="height:400px;"></div>
+      </div>
+
       <!-- Thumbnail mini-view of other streams -->
       <div class="grid grid-cols-3 gap-2 mt-2" id="stream-thumbs">
         <!-- Populated by JS when multiple streams are live -->
@@ -558,6 +567,22 @@ switchStream = function(channelKey) {
     player.innerHTML = embedHtml;
     badge.classList.remove('hidden');
     badgeName.textContent = ch.name;
+
+    // Show live chat
+    const chatContainer = document.getElementById('chat-container');
+    const chatPlayer = document.getElementById('chat-player');
+    if (ch.platform === 'youtube' && ch.videoId && ch.videoId !== 'auto') {
+      chatPlayer.innerHTML = `<iframe src="https://www.youtube.com/live_chat?v=${ch.videoId}&embed_domain=${location.hostname}&dark_theme=1"
+        class="w-full h-full" frameborder="0"></iframe>`;
+      chatContainer.classList.remove('hidden');
+    } else if (ch.platform === 'twitch') {
+      chatPlayer.innerHTML = `<iframe src="https://www.twitch.tv/embed/${ch.twitchUser}/chat?parent=${location.hostname}&darkpopout"
+        class="w-full h-full" frameborder="0"></iframe>`;
+      chatContainer.classList.remove('hidden');
+    } else {
+      chatContainer.classList.add('hidden');
+      chatPlayer.innerHTML = '';
+    }
   } else {
     // Fallback placeholder
     const channelUrl = ch.platform === 'twitch' ? 'https://twitch.tv/thiskk' :
@@ -573,9 +598,23 @@ switchStream = function(channelKey) {
       </div>
     </div>`;
     badge.classList.add('hidden');
+    document.getElementById('chat-container').classList.add('hidden');
+    document.getElementById('chat-player').innerHTML = '';
   }
   activeStream = channelKey;
 };
+
+function toggleChat() {
+  const chatPlayer = document.getElementById('chat-player');
+  const btn = document.getElementById('chat-toggle-btn');
+  if (chatPlayer.style.height === '0px') {
+    chatPlayer.style.height = '400px';
+    btn.textContent = 'Hide';
+  } else {
+    chatPlayer.style.height = '0px';
+    btn.textContent = 'Show';
+  }
+}
 
 checkYouTubeLive();
 
