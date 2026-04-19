@@ -7,9 +7,9 @@
 // We now require MULTIPLE confirming signals before declaring a stream live.
 
 const CHANNELS = {
-  louis: { platform: 'youtube', handle: 'saytanaa' },
-  job:   { platform: 'youtube', handle: 'j3chachannel' },
-  geng:  { platform: 'youtube', handle: 'GenghisKhanz' },
+  louis: { platform: 'youtube', handle: 'saytanaa', channelId: 'UCN868jOHHyoNmreGDLgOTwg' },
+  job:   { platform: 'youtube', handle: 'j3chachannel', channelId: 'UC0d4hhkjnZz7k7VDlDVpyxQ' },
+  geng:  { platform: 'youtube', handle: 'GenghisKhanz', channelId: 'UCAJhVDKr0d2ulIiHviMacag' },
   kk:    { platform: 'twitch',  handle: 'thiskk' },
 };
 
@@ -105,20 +105,21 @@ async function checkYouTubeLive(handle) {
  * Requires YOUTUBE_API_KEY in Cloudflare Worker secrets.
  * Falls back to scraping if API key is not set or API call fails.
  */
-async function checkYouTubeLiveAPI(handle, apiKey) {
+async function checkYouTubeLiveAPI(handle, apiKey, knownChannelId) {
   if (!apiKey) return null; // No API key, skip
 
   try {
-    // Step 1: Search for live broadcasts on this channel
-    const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=&q=&type=video&eventType=live&maxResults=1&key=${apiKey}`;
-    // We need the channel ID, but we only have the handle. Use the channels endpoint first.
-    const chRes = await fetch(
-      `https://www.googleapis.com/youtube/v3/channels?part=id&forHandle=${handle}&key=${apiKey}`
-    );
-    if (!chRes.ok) return null;
-    const chData = await chRes.json();
-    const channelId = chData.items?.[0]?.id;
-    if (!channelId) return null;
+    // Use hardcoded channelId if available (forHandle resolution is unreliable)
+    let channelId = knownChannelId;
+    if (!channelId) {
+      const chRes = await fetch(
+        `https://www.googleapis.com/youtube/v3/channels?part=id&forHandle=${handle}&key=${apiKey}`
+      );
+      if (!chRes.ok) return null;
+      const chData = await chRes.json();
+      channelId = chData.items?.[0]?.id;
+      if (!channelId) return null;
+    }
 
     // Step 2: Search for active live streams on this channel
     const searchRes = await fetch(
@@ -210,7 +211,7 @@ export default {
       await Promise.all(Object.entries(CHANNELS).map(async ([key, ch]) => {
         if (ch.platform === 'youtube') {
           // Try YouTube Data API first (if API key is configured)
-          let result = await checkYouTubeLiveAPI(ch.handle, apiKey);
+          let result = await checkYouTubeLiveAPI(ch.handle, apiKey, ch.channelId);
           if (!result) {
             // Fallback to scraping
             result = await checkYouTubeLive(ch.handle);
