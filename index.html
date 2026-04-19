@@ -348,9 +348,18 @@
         </div>
       </div>
 
-      <!-- Previous Reports -->
+      <!-- Status filter -->
+      <div class="flex gap-2 mb-4">
+        <button onclick="filterReports('all')" data-rf="all" class="rf-tab px-3 py-1.5 rounded-lg text-xs border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 cursor-pointer">ทั้งหมด</button>
+        <button onclick="filterReports('pending')" data-rf="pending" class="rf-tab px-3 py-1.5 rounded-lg text-xs border border-dark-600/30 text-gray-500 cursor-pointer">รอดำเนินการ</button>
+        <button onclick="filterReports('in-progress')" data-rf="in-progress" class="rf-tab px-3 py-1.5 rounded-lg text-xs border border-dark-600/30 text-gray-500 cursor-pointer">กำลังทำ</button>
+        <button onclick="filterReports('done')" data-rf="done" class="rf-tab px-3 py-1.5 rounded-lg text-xs border border-dark-600/30 text-gray-500 cursor-pointer">เสร็จแล้ว</button>
+      </div>
+
+      <!-- Public Feedback Board -->
       <div>
-        <h3 class="font-display text-sm tracking-widest text-gray-400 uppercase mb-4">Feedback ล่าสุด</h3>
+        <h3 class="font-display text-sm tracking-widest text-gray-400 uppercase mb-4">Feedback Board</h3>
+        <p class="text-xs text-gray-500 mb-3">เห็นด้วยกับ feedback ไหน กด 👍 ได้เลย!</p>
         <div class="space-y-2" id="report-list">
           <p class="text-gray-400 text-sm text-center py-4">ยังไม่มี feedback</p>
         </div>
@@ -1048,21 +1057,73 @@ async function submitReport() {
   renderReports();
 }
 
-function renderReports() {
+let reportFilter = 'all';
+function filterReports(f) {
+  reportFilter = f;
+  document.querySelectorAll('.rf-tab').forEach(t => {
+    const a = t.dataset.rf === f;
+    t.classList.toggle('border-cyan-500/30', a);
+    t.classList.toggle('bg-cyan-500/10', a);
+    t.classList.toggle('text-cyan-400', a);
+    t.classList.toggle('border-dark-600/30', !a);
+    t.classList.toggle('text-gray-500', !a);
+    t.classList.toggle('bg-transparent', !a);
+  });
+  renderReports();
+}
+
+function getUpvoted() { try { return JSON.parse(localStorage.getItem('s3t_upvoted')||'[]'); } catch { return []; } }
+
+function upvoteReport(idx) {
+  if (!rateLimit('upvote', 3000)) return;
+  const upvoted = getUpvoted();
+  if (upvoted.includes(idx)) return;
+  upvoted.push(idx);
+  localStorage.setItem('s3t_upvoted', JSON.stringify(upvoted));
   const reports = getReports();
+  if (reports[idx]) { reports[idx].upvotes = (reports[idx].upvotes||0)+1; localStorage.setItem('s3t_reports', JSON.stringify(reports)); }
+  renderReports();
+}
+
+function renderReports() {
+  let reports = getReports();
   const el = document.getElementById('report-list');
   if (!reports.length) { el.innerHTML = '<p class="text-gray-400 text-sm text-center py-4">ยังไม่มี feedback</p>'; return; }
+
+  // Filter by status
+  if (reportFilter !== 'all') {
+    reports = reports.filter(r => (r.status||'pending') === reportFilter);
+  }
+  if (!reports.length) { el.innerHTML = '<p class="text-gray-400 text-sm text-center py-4">ไม่มี feedback ในหมวดนี้</p>'; return; }
+
+  // Sort by upvotes
+  const allReports = getReports();
+  const upvoted = getUpvoted();
   const typeLabel = { feature:'ฟีเจอร์', bug:'Bug', game:'เกมส์', other:'อื่นๆ' };
   const typeColor = { feature:'text-cyan-400', bug:'text-red-400', game:'text-accent-green', other:'text-gray-400' };
-  el.innerHTML = reports.slice(0, 20).map(r => `
-    <div class="bg-dark-800/30 rounded-xl border border-dark-600/20 p-3">
-      <div class="flex items-center gap-2 mb-1">
-        <span class="text-xs ${typeColor[r.type]||'text-gray-400'}">${typeLabel[r.type]||r.type}</span>
-        <span class="text-xs text-gray-400">${r.name}</span>
+  const statusLabel = { pending:'รอดำเนินการ', 'in-progress':'กำลังทำ', done:'เสร็จแล้ว ✅' };
+  const statusColor = { pending:'text-gray-500', 'in-progress':'text-accent-orange', done:'text-accent-green' };
+
+  el.innerHTML = reports.map(r => {
+    const idx = allReports.indexOf(r);
+    const ups = r.upvotes||0;
+    const voted = upvoted.includes(idx);
+    const st = r.status||'pending';
+    return `<div class="bg-dark-800/30 rounded-xl border ${st==='done'?'border-accent-green/20':'border-dark-600/20'} p-3">
+      <div class="flex items-center gap-2 mb-1 flex-wrap">
+        <span class="text-xs ${typeColor[r.type]||'text-gray-400'} font-medium">${typeLabel[r.type]||r.type}</span>
+        <span class="text-xs ${statusColor[st]}">${statusLabel[st]||st}</span>
+        <span class="text-xs text-gray-500">${r.name||'ไม่ระบุ'}</span>
         <span class="text-xs text-gray-500 ml-auto">${new Date(r.time).toLocaleDateString('th-TH',{day:'numeric',month:'short'})}</span>
       </div>
-      <p class="text-sm text-gray-300">${r.text}</p>
-    </div>`).join('');
+      <p class="text-sm text-gray-300 mt-1">${r.text}</p>
+      <div class="flex items-center gap-3 mt-2">
+        <button onclick="upvoteReport(${idx})" class="text-xs ${voted?'text-cyan-400':'text-gray-500 hover:text-cyan-400'} cursor-pointer transition-colors">
+          👍 ${ups>0?ups:''}${voted?' เห็นด้วยแล้ว':''}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // === URL ROUTING ===
