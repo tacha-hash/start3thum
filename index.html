@@ -104,22 +104,36 @@
           </div>
           <!-- Crew -->
           <div class="mt-8 flex flex-wrap gap-4 sm:gap-6">
-            <a href="https://youtube.com/@saytanaa" target="_blank" class="flex items-center gap-3 group">
-              <img src="assets/profiles/louis.png" alt="หลุยส์" class="w-12 h-12 rounded-full object-cover profile-ring">
-              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors">หลุยส์</p><p class="text-xs text-gray-500">@saytanaa</p></div>
-            </a>
-            <a href="https://youtube.com/@j3chachannel" target="_blank" class="flex items-center gap-3 group">
-              <img src="assets/profiles/job.png" alt="แปะ" class="w-12 h-12 rounded-full object-cover profile-ring">
-              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors">แปะ</p><p class="text-xs text-gray-500">@j3chachannel</p></div>
-            </a>
-            <a href="https://youtube.com/@GenghisKhanz" target="_blank" class="flex items-center gap-3 group">
-              <img src="assets/profiles/geng.png" alt="เจง" class="w-12 h-12 rounded-full object-cover profile-ring">
-              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors">เจง</p><p class="text-xs text-gray-500">@GenghisKhanz</p></div>
-            </a>
-            <a href="https://twitch.tv/thiskk" target="_blank" class="flex items-center gap-3 group">
-              <img src="assets/profiles/kk.png" alt="เค" class="w-12 h-12 rounded-full object-cover profile-ring">
-              <div><p class="text-sm font-medium group-hover:text-purple-400 transition-colors">เค</p><p class="text-xs text-gray-500">@thiskk <span class="text-purple-400">TW</span></p></div>
-            </a>
+            <div class="flex items-center gap-3 group relative" onclick="toggleContact('louis')">
+              <img src="assets/profiles/louis.png" alt="หลุยส์" class="w-12 h-12 rounded-full object-cover profile-ring cursor-pointer">
+              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors cursor-pointer">หลุยส์</p><p class="text-xs text-gray-500">@saytanaa</p></div>
+              <div id="contact-louis" class="hidden absolute top-14 left-0 bg-dark-800 border border-dark-600/30 rounded-xl p-3 z-20 space-y-1.5 min-w-[160px] shadow-xl">
+                <a href="https://youtube.com/@saytanaa" target="_blank" class="flex items-center gap-2 text-xs text-gray-300 hover:text-cyan-400">YouTube</a>
+                <a href="https://www.tiktok.com/@saytanaa" target="_blank" class="flex items-center gap-2 text-xs text-gray-300 hover:text-cyan-400">TikTok</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 group relative" onclick="toggleContact('job')">
+              <img src="assets/profiles/job.png" alt="แปะ" class="w-12 h-12 rounded-full object-cover profile-ring cursor-pointer">
+              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors cursor-pointer">แปะ</p><p class="text-xs text-gray-500">@j3chachannel</p></div>
+              <div id="contact-job" class="hidden absolute top-14 left-0 bg-dark-800 border border-dark-600/30 rounded-xl p-3 z-20 space-y-1.5 min-w-[160px] shadow-xl">
+                <a href="https://youtube.com/@j3chachannel" target="_blank" class="flex items-center gap-2 text-xs text-gray-300 hover:text-cyan-400">YouTube</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 group relative" onclick="toggleContact('geng')">
+              <img src="assets/profiles/geng.png" alt="เจง" class="w-12 h-12 rounded-full object-cover profile-ring cursor-pointer">
+              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors cursor-pointer">เจง</p><p class="text-xs text-gray-500">@GenghisKhanz</p></div>
+              <div id="contact-geng" class="hidden absolute top-14 left-0 bg-dark-800 border border-dark-600/30 rounded-xl p-3 z-20 space-y-1.5 min-w-[160px] shadow-xl">
+                <a href="https://youtube.com/@GenghisKhanz" target="_blank" class="flex items-center gap-2 text-xs text-gray-300 hover:text-cyan-400">YouTube</a>
+                <a href="https://twitch.tv/genghiskhanz" target="_blank" class="flex items-center gap-2 text-xs text-gray-300 hover:text-purple-400">Twitch</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 group relative" onclick="toggleContact('kk')">
+              <img src="assets/profiles/kk.png" alt="เค" class="w-12 h-12 rounded-full object-cover profile-ring cursor-pointer">
+              <div><p class="text-sm font-medium group-hover:text-purple-400 transition-colors cursor-pointer">เค</p><p class="text-xs text-gray-500">@thiskk <span class="text-purple-400">TW</span></p></div>
+              <div id="contact-kk" class="hidden absolute top-14 left-0 bg-dark-800 border border-dark-600/30 rounded-xl p-3 z-20 space-y-1.5 min-w-[160px] shadow-xl">
+                <a href="https://twitch.tv/thiskk" target="_blank" class="flex items-center gap-2 text-xs text-gray-300 hover:text-purple-400">Twitch</a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -848,7 +862,11 @@ const VIDEOS = [
   { ch:'geng', title:'Hollow Knight Silksong EP.1', vid:'4F7ML5IWIlc' },
   { ch:'geng', title:'Hollow Knight Silksong EP.3', vid:'5qy93hX0a5M' },
   { ch:'geng', title:'Hollow Knight Silksong EP.5', vid:'tn9K2aEIqDQ' },
-  { ch:'job', title:'J3Cha Channel', vid:'rsqoJYICEts', note:'latest' },
+  { ch:'job', title:'CO-OP ที่แฟนผมชอบมากที่สุด | ABSOLUM', vid:'rsqoJYICEts' },
+  { ch:'job', title:'2 คนผจญภัย | ABSOLUM', vid:'Ay1Z3QaiGJw' },
+  { ch:'job', title:'Start 3 Toom : Ragnarok Landvers', vid:'VvMck4JvU6w', note:'Start 3ทุ่ม' },
+  { ch:'job', title:'Start 3 Toom : พาดหัวข่าว 4 หนุ่มกลุ้มใจ', vid:'ojo2s0FydrQ', note:'Start 3ทุ่ม' },
+  { ch:'job', title:'Start 3 Toom : อาวาดา คาดาฟาราบา', vid:'fEQLMUQp6MI', note:'Start 3ทุ่ม' },
   { ch:'louis', title:'PEAK : จะออกไปแตะขอบฟ้า', vid:'n39GT_QddH0' },
   { ch:'louis', title:'DOKAPON! : ทะเลาะกับจอย', vid:'bPqdoXZKqbA' },
   { ch:'louis', title:'HUMANITZ : ซอมบี้ซีบ้อม', vid:'wWTYfNnRpE0' },
@@ -1093,7 +1111,7 @@ async function fetchReports() {
 }
 
 async function upvoteReport(id) {
-  if (!rateLimit('upvote', 3000)) return;
+  if (!rateLimit('upvote_'+id, 1000)) return;
   const upvoted = getUpvoted();
   if (upvoted.includes(id)) return;
   try {
@@ -1166,6 +1184,18 @@ setView = function(v) {
 };
 
 window.addEventListener('hashchange', applyRoute);
+
+// Contact popups
+function toggleContact(name) {
+  const el = document.getElementById('contact-'+name);
+  document.querySelectorAll('[id^="contact-"]').forEach(e => { if(e!==el) e.classList.add('hidden'); });
+  el.classList.toggle('hidden');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('[onclick*="toggleContact"]')) {
+    document.querySelectorAll('[id^="contact-"]').forEach(e => e.classList.add('hidden'));
+  }
+});
 
 fetchVotes(); fetchReports(); renderRecommend(); renderSuggestions(); updateCountdown();
 setInterval(updateCountdown, 1000);
