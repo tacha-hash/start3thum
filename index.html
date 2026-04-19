@@ -81,9 +81,9 @@
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
         <!-- Auth -->
-        <div id="auth-area">
-          <button onclick="googleSignIn()" id="signin-btn" class="hidden sm:block px-3 py-1.5 rounded-lg bg-dark-800 border border-dark-600/30 text-xs text-gray-400 hover:text-cyan-400 cursor-pointer">Sign In</button>
-          <div id="user-badge" class="hidden items-center gap-2 cursor-pointer" onclick="toggleUserMenu()">
+        <div id="auth-area" class="flex items-center">
+          <div id="g-signin-btn" class="hidden sm:block"></div>
+          <div id="user-badge" class="hidden items-center gap-2 cursor-pointer" onclick="signOut()">
             <img id="user-pic" class="w-7 h-7 rounded-full">
             <span id="user-name" class="text-xs text-gray-300 hidden sm:inline"></span>
           </div>
@@ -98,7 +98,7 @@
       <a href="#/4views" onclick="setView('multi');this.parentElement.classList.add('hidden')" class="block py-2 text-sm text-gray-400 hover:text-cyan-400">4-VIEW</a>
       <a href="#/content" onclick="setView('content');this.parentElement.classList.add('hidden')" class="block py-2 text-sm text-gray-400 hover:text-cyan-400">CONTENT</a>
       <a href="#/report" onclick="setView('report');this.parentElement.classList.add('hidden')" class="block py-2 text-sm text-gray-400 hover:text-cyan-400">REPORT</a>
-      <button onclick="googleSignIn()" id="signin-btn-mobile" class="w-full text-left py-2 text-sm text-gray-400 hover:text-cyan-400 cursor-pointer">Sign In with Google</button>
+      <div id="g-signin-btn-mobile" class="py-2"></div>
     </div>
     </div>
   </header>
@@ -1239,14 +1239,22 @@ const GAUTH_CLIENT_ID = '492546940674-c3sf5t15e83rfr8enemkivrs9u2108df.apps.goog
 let authUser = JSON.parse(localStorage.getItem('auth_user')||'null');
 let authToken = localStorage.getItem('auth_token')||null;
 
-function googleSignIn() {
+function initGoogleSignIn() {
+  if (!window.google?.accounts?.id) { setTimeout(initGoogleSignIn, 500); return; }
   google.accounts.id.initialize({
     client_id: GAUTH_CLIENT_ID,
     callback: onGoogleSignIn,
     auto_select: true,
   });
+  // Render button in both desktop + mobile slots
+  const btn = document.getElementById('g-signin-btn');
+  if (btn && !authUser) google.accounts.id.renderButton(btn, {theme:'filled_black', size:'small', text:'signin', shape:'pill'});
+  const btnM = document.getElementById('g-signin-btn-mobile');
+  if (btnM && !authUser) google.accounts.id.renderButton(btnM, {theme:'filled_black', size:'medium', text:'signin_with', width:250});
+  // Also try One Tap
   google.accounts.id.prompt();
 }
+setTimeout(initGoogleSignIn, 300);
 
 async function onGoogleSignIn(res) {
   try {
@@ -1272,28 +1280,25 @@ function signOut() {
 }
 
 function updateAuthUI() {
-  const btn = document.getElementById('signin-btn');
-  const btnM = document.getElementById('signin-btn-mobile');
+  const gBtn = document.getElementById('g-signin-btn');
+  const gBtnM = document.getElementById('g-signin-btn-mobile');
   const badge = document.getElementById('user-badge');
   if (authUser) {
-    if(btn) btn.classList.add('hidden');
-    if(btnM) btnM.textContent = `${authUser.name} (Sign Out)`;
-    if(btnM) btnM.onclick = signOut;
+    if(gBtn) gBtn.classList.add('hidden');
+    if(gBtnM) gBtnM.classList.add('hidden');
     badge.classList.remove('hidden');
     badge.classList.add('flex');
     document.getElementById('user-pic').src = authUser.picture||'';
     document.getElementById('user-name').textContent = authUser.name||'';
   } else {
-    if(btn) btn.classList.remove('hidden');
-    if(btnM) btnM.textContent = 'Sign In with Google';
-    if(btnM) btnM.onclick = googleSignIn;
+    if(gBtn) gBtn.classList.remove('hidden');
+    if(gBtnM) gBtnM.classList.remove('hidden');
     badge.classList.add('hidden');
     badge.classList.remove('flex');
+    initGoogleSignIn();
   }
 }
-function toggleUserMenu() { signOut(); }
-// Init auth UI
-try { updateAuthUI(); if(authUser && window.google) google.accounts.id.initialize({client_id:GAUTH_CLIENT_ID,callback:onGoogleSignIn,auto_select:true}); } catch{}
+updateAuthUI();
 
 // Contact popups
 function toggleContact(name) {
