@@ -676,17 +676,22 @@ async function fetchVotes() {
   renderVotes();
 }
 
+let _voting = false;
 async function vote(id) {
-  if (votedThisWeek) return;
+  if (votedThisWeek || _voting) return;
   if (!rateLimit('vote', 3000)) return;
+  _voting = true;
   votedThisWeek = true;
   localStorage.setItem('s3t_voted_week', getISOWeek());
+  // Disable buttons immediately
+  document.querySelectorAll('.vote-btn').forEach(b => { b.disabled = true; b.classList.add('opacity-50'); });
   try {
     const r = await fetch(VOTE_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({gameId:id}) });
-    if (r.ok) { await fetchVotes(); return; }
+    if (r.ok) { await fetchVotes(); _voting = false; return; }
   } catch {}
   voteData[id] = (voteData[id]||0)+1;
   localStorage.setItem('s3t_votes', JSON.stringify(voteData));
+  _voting = false;
   renderVotes();
 }
 
