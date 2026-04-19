@@ -394,6 +394,8 @@ const GAMES = [
   { id:'waddlewords', name:'Waddle Words', price:'~69฿', players:'1-4 คน', img:'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4204310/b94c1fbed90f2705f9709a23ea7d025fcd58c8ec/header.jpg?t=1775062388', desc:'เป็ดสะกดคำ ปั่นมาก', detail:'เป็ดสะกดคำแข่งกัน เดินไปเดินมา ปั่นมาก ราคาถูก 69 บาท spec ต่ำสุดๆ เกมใหม่', steam:'https://store.steampowered.com/app/4204310/Waddle_Words/', tag:'ใหม่' },
   { id:'superbattlegolf', name:'Super Battle Golf', price:'ฟรี!', players:'1-8 คน', img:'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4069520/2d9b9b6bc0ac18c6eb76f5e38b649425d9202759/header_alt_assets_0.jpg?t=1776252853', desc:'ตีกอล์ฟออนไลน์ ปั่นกัน', detail:'เกมกอล์ฟออนไลน์ 1-8 คน เล่นพร้อมกัน ตี ยิง ก่อกวน แข่งกัน ฟรี! จากที่แฟนๆเสนอมา', steam:'https://store.steampowered.com/app/4069520/Super_Battle_Golf/', tag:'แฟนเสนอ' },
   { id:'gentlemensdispute', name:"A Gentlemen's Dispute", price:'ฟรี!', players:'2-4 คน', img:'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2820700/8bf178b3ecd1fdb13c147baf11241ef8b7e57c46/header.jpg?t=1771289658', desc:'ต่อยกันแบบสุภาพบุรุษ', detail:'เกมต่อสู้ปาร์ตี้สุภาพบุรุษ! วางกับดัก ตีไม้เบสบอล ยิงปืนใหญ่ ทำลายฉากได้หมด ฟรี! จากที่แฟนๆเสนอมา', steam:'https://store.steampowered.com/app/2820700/A_Gentlemens_Dispute/', tag:'แฟนเสนอ' },
+  { id:'walkoflife', name:'Walk of Life', price:'ฟรี!', players:'2-6 คน', img:'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1910150/c7c47eef965ae90f6699012a51ce0b01eb09b584/header.jpg?t=1776183291', desc:'จำลองชีวิตแข่งกัน', detail:'เกมจำลองชีวิตแข่งกัน 6 คน เลือกอาชีพ ใช้ชีวิต แข่งว่าใครประสบความสำเร็จกว่า ฟรี! จากที่แฟนๆเสนอมา', steam:'https://store.steampowered.com/app/1910150/Walk_of_Life/', tag:'แฟนเสนอ' },
+  { id:'partyanimals', name:'Party Animals', price:'ฟรี!', players:'1-8 คน', img:'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1260320/header.jpg?t=1770880496', desc:'สัตว์น่ารักตีกัน', detail:'สู้กันเป็นลูกหมา ลูกแมว สัตว์น่ารักต่างๆ ฟิสิกส์ตลก ตีกันวุ่นวาย 8 คน ฟรี! จากที่แฟนๆเสนอมา', steam:'https://store.steampowered.com/app/1260320/Party_Animals/', tag:'แฟนเสนอ' },
   { id:'windrose', name:'Windrose', price:'ฟรี!', players:'1-4 คน', img:'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3041230/7e838d87d787735d5d29d72777c5ee55653dfb2b/header.jpg?t=1776158614', desc:'โจรสลัด survival co-op', detail:'ผจญภัยยุคโจรสลัด PvE survival สู้ทั้งบนบกและทะเล เล่นเดี่ยวหรือ co-op 4 คน ฟรี! จากที่แฟนๆเสนอมา', steam:'https://store.steampowered.com/app/3041230/Windrose/', tag:'แฟนเสนอ' },
 ];
 
@@ -805,6 +807,7 @@ const VIDEOS = [
   { ch:'geng', title:'Hollow Knight Silksong EP.1', vid:'4F7ML5IWIlc' },
   { ch:'geng', title:'Hollow Knight Silksong EP.3', vid:'5qy93hX0a5M' },
   { ch:'geng', title:'Hollow Knight Silksong EP.5', vid:'tn9K2aEIqDQ' },
+  { ch:'job', title:'J3Cha Channel', vid:'rsqoJYICEts', note:'latest' },
   { ch:'louis', title:'PEAK : จะออกไปแตะขอบฟ้า', vid:'n39GT_QddH0' },
   { ch:'louis', title:'DOKAPON! : ทะเลาะกับจอย', vid:'bPqdoXZKqbA' },
   { ch:'louis', title:'HUMANITZ : ซอมบี้ซีบ้อม', vid:'wWTYfNnRpE0' },
@@ -989,8 +992,13 @@ function setReportType(t) {
 
 function getReports() { try { return JSON.parse(localStorage.getItem('s3t_reports')||'[]'); } catch { return []; } }
 
+// Load saved name
+if (document.getElementById('report-name')) {
+  document.getElementById('report-name').value = localStorage.getItem('s3t_username') || '';
+}
 async function submitReport() {
   const name = document.getElementById('report-name').value.trim() || 'ไม่ระบุ';
+  localStorage.setItem('s3t_username', name);
   const text = document.getElementById('report-text').value.trim();
   if (!text) return;
   if (!rateLimit('report', 30000)) { const s=document.getElementById('report-status'); s.textContent='รอ 30 วินาทีก่อนส่ง feedback ใหม่'; s.classList.remove('hidden'); return; }
