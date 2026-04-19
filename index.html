@@ -62,7 +62,7 @@
         <img src="assets/logo.png" alt="Start 3ทุ่ม" class="w-10 h-10 rounded-full profile-ring cursor-pointer" onclick="setView('home')">
         <div>
           <h1 class="font-display text-lg tracking-wide text-cyan-400 glow-text">START 3ทุ่ม</h1>
-          <p class="text-[10px] text-gray-500 tracking-widest uppercase">Game Night Every Sunday 21:00</p>
+          <p class="text-xs text-gray-500 tracking-widest uppercase">Game Night Every Sunday 21:00</p>
         </div>
       </div>
       <div class="flex items-center gap-3">
@@ -98,7 +98,7 @@
               <p class="text-gray-500 text-xs mt-2" id="next-game-desc">Co-op climbing chaos — 4 players screaming together</p>
             </div>
             <div class="text-center bg-dark-800/80 backdrop-blur rounded-2xl px-8 py-5 border border-dark-600/50 glow-cyan-sm">
-              <p class="text-[10px] text-gray-500 tracking-widest uppercase mb-1">Starts In</p>
+              <p class="text-xs text-gray-500 tracking-widest uppercase mb-1">Starts In</p>
               <div class="text-3xl font-display text-cyan-400 glow-text tabular-nums" id="countdown-timer">--:--:--</div>
             </div>
           </div>
@@ -106,19 +106,19 @@
           <div class="mt-8 flex flex-wrap gap-4 sm:gap-6">
             <a href="https://youtube.com/@saytanaa" target="_blank" class="flex items-center gap-3 group">
               <img src="assets/profiles/louis.png" alt="หลุยส์" class="w-12 h-12 rounded-full object-cover profile-ring">
-              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors">หลุยส์</p><p class="text-[10px] text-gray-500">@saytanaa</p></div>
+              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors">หลุยส์</p><p class="text-xs text-gray-500">@saytanaa</p></div>
             </a>
             <a href="https://youtube.com/@j3chachannel" target="_blank" class="flex items-center gap-3 group">
               <img src="assets/profiles/job.png" alt="แปะ" class="w-12 h-12 rounded-full object-cover profile-ring">
-              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors">แปะ</p><p class="text-[10px] text-gray-500">@j3chachannel</p></div>
+              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors">แปะ</p><p class="text-xs text-gray-500">@j3chachannel</p></div>
             </a>
             <a href="https://youtube.com/@GenghisKhanz" target="_blank" class="flex items-center gap-3 group">
               <img src="assets/profiles/geng.png" alt="เจง" class="w-12 h-12 rounded-full object-cover profile-ring">
-              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors">เจง</p><p class="text-[10px] text-gray-500">@GenghisKhanz</p></div>
+              <div><p class="text-sm font-medium group-hover:text-cyan-400 transition-colors">เจง</p><p class="text-xs text-gray-500">@GenghisKhanz</p></div>
             </a>
             <a href="https://twitch.tv/thiskk" target="_blank" class="flex items-center gap-3 group">
               <img src="assets/profiles/kk.png" alt="เค" class="w-12 h-12 rounded-full object-cover profile-ring">
-              <div><p class="text-sm font-medium group-hover:text-purple-400 transition-colors">เค</p><p class="text-[10px] text-gray-500">@thiskk <span class="text-purple-400">TW</span></p></div>
+              <div><p class="text-sm font-medium group-hover:text-purple-400 transition-colors">เค</p><p class="text-xs text-gray-500">@thiskk <span class="text-purple-400">TW</span></p></div>
             </a>
           </div>
         </div>
@@ -128,7 +128,7 @@
       <section>
         <div class="flex items-center justify-between mb-4">
           <h2 class="font-display text-sm tracking-widest text-red-400 uppercase live-pulse">ถ่ายทอดสด</h2>
-          <button onclick="setView('multi')" class="text-[10px] text-gray-500 hover:text-cyan-400 tracking-wider cursor-pointer">เปิด 4 จอ →</button>
+          <button onclick="setView('multi')" class="text-xs text-gray-500 hover:text-cyan-400 tracking-wider cursor-pointer">เปิด 4 จอ →</button>
         </div>
         <div class="flex gap-2 mb-3 overflow-x-auto pb-2">
           <button onclick="switchStream('louis')" data-ch="louis" class="ch-tab flex items-center gap-2 px-4 py-2 rounded-xl border border-dark-600/30 bg-dark-800/50 text-sm whitespace-nowrap transition-all hover:border-cyan-500/30">
@@ -159,7 +159,7 @@
         <div class="text-center mb-6">
           <h2 class="font-display text-2xl tracking-wide text-accent-orange glow-text-orange">โหวตเกมส์อาทิตย์หน้า</h2>
           <p class="text-gray-400 text-sm mt-1">กดโหวต หรือกดดูรายละเอียดเกมส์ได้เลย!</p>
-          <p class="text-[10px] text-gray-600 mt-1" id="vote-total"></p>
+          <p class="text-xs text-gray-400 mt-1" id="vote-total"></p>
         </div>
         <!-- Leaderboard -->
         <div class="mb-6 hidden" id="vote-leaderboard"></div>
@@ -197,7 +197,7 @@
           <div id="steam-results" class="mt-3 space-y-2 hidden"></div>
           <!-- Submitted suggestions -->
           <div id="suggest-list" class="mt-4 space-y-2"></div>
-          <p id="suggest-status" class="text-xs text-gray-600 mt-2 hidden"></p>
+          <p id="suggest-status" class="text-xs text-gray-400 mt-2 hidden"></p>
         </div>
       </section>
 
@@ -232,11 +232,11 @@
         <div class="flex-1 rounded-2xl overflow-hidden border border-dark-600/30 bg-dark-900" id="single-stream"></div>
         <div class="w-[360px] hidden lg:flex flex-col rounded-2xl overflow-hidden border border-dark-600/30 bg-dark-800/50" id="single-chat">
           <div class="px-3 py-1.5 border-b border-dark-600/20 flex items-center gap-1 overflow-x-auto">
-            <span class="text-[10px] text-gray-500 tracking-wider mr-1">CHAT:</span>
-            <button onclick="switchChat('louis')" data-chat="louis" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">หลุยส์</button>
-            <button onclick="switchChat('job')" data-chat="job" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">แปะ</button>
-            <button onclick="switchChat('geng')" data-chat="geng" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">เจง</button>
-            <button onclick="switchChat('kk')" data-chat="kk" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-purple-400 transition-colors cursor-pointer">เค</button>
+            <span class="text-xs text-gray-500 tracking-wider mr-1">CHAT:</span>
+            <button onclick="switchChat('louis')" data-chat="louis" class="chat-tab px-2 py-1 rounded text-xs text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">หลุยส์</button>
+            <button onclick="switchChat('job')" data-chat="job" class="chat-tab px-2 py-1 rounded text-xs text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">แปะ</button>
+            <button onclick="switchChat('geng')" data-chat="geng" class="chat-tab px-2 py-1 rounded text-xs text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">เจง</button>
+            <button onclick="switchChat('kk')" data-chat="kk" class="chat-tab px-2 py-1 rounded text-xs text-gray-500 hover:text-purple-400 transition-colors cursor-pointer">เค</button>
           </div>
           <div class="flex-1" id="single-chat-frame"></div>
         </div>
@@ -252,25 +252,25 @@
         <div class="flex-1 grid grid-cols-2 grid-rows-2 gap-2">
           <div class="multiview-cell is-main rounded-xl overflow-hidden border border-dark-600/30 bg-dark-900 relative" data-mv="louis" onclick="mvSelect('louis')">
             <div class="absolute top-2 left-2 z-10 flex items-center gap-1.5 bg-dark-900/80 backdrop-blur px-2 py-1 rounded-full">
-              <img src="assets/profiles/louis.png" class="w-5 h-5 rounded-full"><span class="text-[10px]">หลุยส์</span>
+              <img src="assets/profiles/louis.png" class="w-5 h-5 rounded-full"><span class="text-xs">หลุยส์</span>
             </div>
             <div class="w-full h-full" id="mv-louis"></div>
           </div>
           <div class="multiview-cell rounded-xl overflow-hidden border border-dark-600/30 bg-dark-900 relative" data-mv="job" onclick="mvSelect('job')">
             <div class="absolute top-2 left-2 z-10 flex items-center gap-1.5 bg-dark-900/80 backdrop-blur px-2 py-1 rounded-full">
-              <img src="assets/profiles/job.png" class="w-5 h-5 rounded-full"><span class="text-[10px]">แปะ</span>
+              <img src="assets/profiles/job.png" class="w-5 h-5 rounded-full"><span class="text-xs">แปะ</span>
             </div>
             <div class="w-full h-full" id="mv-job"></div>
           </div>
           <div class="multiview-cell rounded-xl overflow-hidden border border-dark-600/30 bg-dark-900 relative" data-mv="geng" onclick="mvSelect('geng')">
             <div class="absolute top-2 left-2 z-10 flex items-center gap-1.5 bg-dark-900/80 backdrop-blur px-2 py-1 rounded-full">
-              <img src="assets/profiles/geng.png" class="w-5 h-5 rounded-full"><span class="text-[10px]">เจง</span>
+              <img src="assets/profiles/geng.png" class="w-5 h-5 rounded-full"><span class="text-xs">เจง</span>
             </div>
             <div class="w-full h-full" id="mv-geng"></div>
           </div>
           <div class="multiview-cell rounded-xl overflow-hidden border border-dark-600/30 bg-dark-900 relative" data-mv="kk" onclick="mvSelect('kk')">
             <div class="absolute top-2 left-2 z-10 flex items-center gap-1.5 bg-dark-900/80 backdrop-blur px-2 py-1 rounded-full">
-              <img src="assets/profiles/kk.png" class="w-5 h-5 rounded-full"><span class="text-[10px]">เค</span>
+              <img src="assets/profiles/kk.png" class="w-5 h-5 rounded-full"><span class="text-xs">เค</span>
             </div>
             <div class="w-full h-full" id="mv-kk"></div>
           </div>
@@ -278,11 +278,11 @@
         <!-- Chat panel -->
         <div class="w-[340px] hidden lg:flex flex-col rounded-2xl overflow-hidden border border-dark-600/30 bg-dark-800/50">
           <div class="px-3 py-1.5 border-b border-dark-600/20 flex items-center gap-1 overflow-x-auto">
-            <span class="text-[10px] text-gray-500 tracking-wider mr-1">CHAT:</span>
-            <button onclick="switchChat('louis')" data-chat="louis" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">หลุยส์</button>
-            <button onclick="switchChat('job')" data-chat="job" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">แปะ</button>
-            <button onclick="switchChat('geng')" data-chat="geng" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">เจง</button>
-            <button onclick="switchChat('kk')" data-chat="kk" class="chat-tab px-2 py-1 rounded text-[10px] text-gray-500 hover:text-purple-400 transition-colors cursor-pointer">เค</button>
+            <span class="text-xs text-gray-500 tracking-wider mr-1">CHAT:</span>
+            <button onclick="switchChat('louis')" data-chat="louis" class="chat-tab px-2 py-1 rounded text-xs text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">หลุยส์</button>
+            <button onclick="switchChat('job')" data-chat="job" class="chat-tab px-2 py-1 rounded text-xs text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">แปะ</button>
+            <button onclick="switchChat('geng')" data-chat="geng" class="chat-tab px-2 py-1 rounded text-xs text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer">เจง</button>
+            <button onclick="switchChat('kk')" data-chat="kk" class="chat-tab px-2 py-1 rounded text-xs text-gray-500 hover:text-purple-400 transition-colors cursor-pointer">เค</button>
           </div>
           <div class="flex-1" id="mv-chat-frame"></div>
         </div>
@@ -352,7 +352,7 @@
       <div>
         <h3 class="font-display text-sm tracking-widest text-gray-400 uppercase mb-4">Feedback ล่าสุด</h3>
         <div class="space-y-2" id="report-list">
-          <p class="text-gray-600 text-sm text-center py-4">ยังไม่มี feedback</p>
+          <p class="text-gray-400 text-sm text-center py-4">ยังไม่มี feedback</p>
         </div>
       </div>
     </div>
@@ -363,11 +363,11 @@
     <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <img src="assets/logo.png" alt="Start 3ทุ่ม" class="w-6 h-6 rounded-full opacity-50">
-        <span class="text-xs text-gray-600 tracking-wider">Start 3ทุ่ม — Game Night Every Sunday</span>
+        <span class="text-xs text-gray-400 tracking-wider">Start 3ทุ่ม — Game Night Every Sunday</span>
       </div>
       <div class="flex gap-4">
-        <a href="https://youtube.com/@saytanaa" target="_blank" class="text-xs text-gray-600 hover:text-cyan-400 transition-colors">YouTube</a>
-        <a href="https://twitch.tv/thiskk" target="_blank" class="text-xs text-gray-600 hover:text-purple-400 transition-colors">Twitch</a>
+        <a href="https://youtube.com/@saytanaa" target="_blank" class="text-xs text-gray-400 hover:text-cyan-400 transition-colors">YouTube</a>
+        <a href="https://twitch.tv/thiskk" target="_blank" class="text-xs text-gray-400 hover:text-purple-400 transition-colors">Twitch</a>
       </div>
     </div>
   </footer>
@@ -490,7 +490,7 @@ function placeholder(key, ch) {
   return `<div class="w-full h-full flex items-center justify-center"><div class="text-center">
     <img src="assets/profiles/${key}.png" alt="${ch.name}" class="w-16 h-16 rounded-full mx-auto mb-3 opacity-30 profile-ring">
     <p class="text-gray-400 text-sm">${ch.name}</p>
-    <p class="text-gray-600 text-xs mt-1">ยังไม่ได้ถ่ายทอดสด</p>
+    <p class="text-gray-400 text-xs mt-1">ยังไม่ได้ถ่ายทอดสด</p>
     <a href="${url}" target="_blank" class="inline-block mt-2 text-xs text-cyan-500 hover:text-cyan-400">ไปที่ช่อง →</a>
   </div></div>`;
 }
@@ -533,7 +533,7 @@ function switchStream(key) {
   // HOME: chat follows stream selection
   const homeChat = document.getElementById('home-chat');
   if (homeChat && currentView !== 'single') {
-    homeChat.innerHTML = chat || '<div class="w-full h-full flex items-center justify-center"><p class="text-gray-600 text-xs">ยังไม่ได้ถ่ายทอดสด</p></div>';
+    homeChat.innerHTML = chat || '<div class="w-full h-full flex items-center justify-center"><p class="text-gray-400 text-xs">ยังไม่ได้ถ่ายทอดสด</p></div>';
   }
   // Auto-switch chat selector on LIVE/4-VIEW to match
   if (!activeChatChannel) switchChat(key);
@@ -559,7 +559,7 @@ function switchChat(key) {
   // Update HOME chat
   const homeChat = document.getElementById('home-chat');
   if (homeChat) {
-    homeChat.innerHTML = chat || '<div class="w-full h-full flex items-center justify-center"><p class="text-gray-600 text-xs">Not live</p></div>';
+    homeChat.innerHTML = chat || '<div class="w-full h-full flex items-center justify-center"><p class="text-gray-400 text-xs">Not live</p></div>';
   }
 
   // Update SINGLE view chat
@@ -573,7 +573,7 @@ function switchChat(key) {
   const mvChat = document.getElementById('mv-chat-frame');
   if (mvChat && currentView === 'multi') {
     document.getElementById('mv-chat-name').textContent = ch.name;
-    mvChat.innerHTML = chat || '<div class="flex items-center justify-center h-full text-gray-600 text-xs">No chat</div>';
+    mvChat.innerHTML = chat || '<div class="flex items-center justify-center h-full text-gray-400 text-xs">No chat</div>';
   }
 }
 
@@ -603,7 +603,7 @@ function mvUpdateChat() {
   const ch = CHANNELS[mvMain];
   const chat = getChat(ch);
   document.getElementById('mv-chat-name').textContent = ch.name;
-  document.getElementById('mv-chat-frame').innerHTML = chat || '<div class="flex items-center justify-center h-full text-gray-600 text-xs">No chat available</div>';
+  document.getElementById('mv-chat-frame').innerHTML = chat || '<div class="flex items-center justify-center h-full text-gray-400 text-xs">No chat available</div>';
 }
 
 // === VOTES — API-backed + localStorage fallback ===
@@ -629,6 +629,24 @@ function getISOWeek() {
 }
 let votedThisWeek = localStorage.getItem('s3t_voted_week') === getISOWeek();
 function hasVoted() { return votedThisWeek; }
+
+async function unvote() {
+  if (!votedThisWeek) return;
+  if (!rateLimit('unvote', 5000)) return;
+  try {
+    const r = await fetch(VOTE_API, { method:'DELETE', headers:{'Content-Type':'application/json'}, body:JSON.stringify({}) });
+    if (r.ok) {
+      votedThisWeek = false;
+      localStorage.removeItem('s3t_voted_week');
+      await fetchVotes();
+      return;
+    }
+  } catch {}
+  // Fallback
+  votedThisWeek = false;
+  localStorage.removeItem('s3t_voted_week');
+  renderVotes();
+}
 
 async function fetchVotes() {
   try {
@@ -672,7 +690,7 @@ function renderVotes() {
     lb.innerHTML = `<div class="bg-dark-800/50 rounded-2xl border border-dark-600/30 p-4">
       <div class="flex items-center justify-between mb-3">
         <span class="font-display text-xs tracking-widest text-accent-orange uppercase">อันดับ</span>
-        <span class="text-[10px] text-gray-600">${total} โหวต</span>
+        <span class="text-xs text-gray-400">${total} โหวต</span>
       </div>
       ${sorted.slice(0,3).map((g,i) => {
         const c=votes[g.id]||0, pct=Math.round(c/total*100);
@@ -704,14 +722,16 @@ function renderVotes() {
     return `<div class="bg-dark-800/50 rounded-xl border ${isTop?'border-accent-orange/50':'border-dark-600/30'} overflow-hidden backdrop-blur group">
       <div class="relative cursor-pointer" onclick="showDetail('${g.id}')">
         <img src="${g.img}" alt="${g.name}" class="w-full h-28 object-cover" loading="lazy" onerror="this.style.display='none'">
-        ${g.tag?`<span class="absolute top-1.5 right-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded ${tc}">${g.tag}</span>`:''}
-        ${isTop&&total>0?'<span class="absolute top-1.5 left-1.5 text-[9px] bg-accent-orange text-white px-1.5 py-0.5 rounded font-bold">อันดับ 1</span>':''}
+        ${g.tag?`<span class="absolute top-1.5 right-1.5 text-xs font-bold px-1.5 py-0.5 rounded ${tc}">${g.tag}</span>`:''}
+        ${isTop&&total>0?'<span class="absolute top-1.5 left-1.5 text-xs bg-accent-orange text-white px-1.5 py-0.5 rounded font-bold">อันดับ 1</span>':''}
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><span class="text-xs text-white bg-dark-800/80 px-3 py-1 rounded-full">ดูรายละเอียด</span></div>
       </div>
       <div class="p-3">
         <p class="text-sm font-medium truncate">${g.name}</p>
-        <p class="text-[10px] text-gray-500 truncate">${g.desc}</p>
-        <button onclick="event.stopPropagation();vote('${g.id}')" class="vote-btn w-full mt-2 py-2 rounded-lg text-xs font-bold tracking-wider ${voted?'bg-dark-700 text-gray-500 cursor-default':'bg-gradient-to-r from-cyan-500/20 to-accent-orange/20 text-white hover:from-cyan-500/30 hover:to-accent-orange/30 border border-cyan-500/20'}" ${voted?'disabled':''}>${voted?`${c} โหวต (${pct}%)`:'โหวต'}</button>
+        <p class="text-xs text-gray-500 truncate">${g.desc}</p>
+        <div class="flex gap-1 mt-2">
+          <button onclick="event.stopPropagation();vote('${g.id}')" class="vote-btn flex-1 py-2 rounded-lg text-xs font-bold tracking-wider ${voted?'bg-dark-700 text-gray-500 cursor-default':'bg-gradient-to-r from-cyan-500/20 to-accent-orange/20 text-white hover:from-cyan-500/30 hover:to-accent-orange/30 border border-cyan-500/20'}" ${voted?'disabled':''}>${voted?`${c} โหวต (${pct}%)`:'โหวต'}</button>
+          ${voted?`<button onclick="event.stopPropagation();unvote()" class="vote-btn px-3 py-2 rounded-lg text-xs text-red-400 hover:bg-red-500/10 border border-dark-600/30 cursor-pointer" title="ถอน vote">✕</button>`:''}</div>
         ${voted&&total>0?`<div class="mt-1.5 bg-dark-900 rounded-full h-1 overflow-hidden"><div class="vote-bar ${isTop?'bg-accent-orange':'bg-cyan-500/60'} h-full rounded-full" style="width:${pct}%"></div></div>`:''}</div></div>`;
   }).join('');
 }
@@ -765,7 +785,7 @@ function renderCalendar() {
       else if (ev.status==='vote') { cls += 'bg-accent-orange/10 text-accent-orange/60 border border-accent-orange/20'; dot = '<p class="text-[8px] text-accent-orange/60 mt-0.5">Vote</p>'; }
     } else if (isToday) { cls += 'bg-dark-600 text-white font-bold'; }
     else if (isSunday) { cls += 'text-cyan-400/40'; }
-    else { cls += 'text-gray-600 hover:bg-dark-700'; }
+    else { cls += 'text-gray-400 hover:bg-dark-700'; }
     html += `<div class="${cls}"><span>${d}</span>${dot}</div>`;
   }
   document.getElementById('cal-grid').innerHTML = html;
@@ -783,8 +803,8 @@ function renderRecommend() {
         <img src="${g.img}" alt="${g.name}" class="w-16 h-10 object-cover rounded-lg flex-shrink-0" loading="lazy" onerror="this.style.display='none'">
         <div class="flex-1 min-w-0">
           <span class="text-sm font-medium">${g.name}</span>
-          ${g.tag?`<span class="text-[10px] ${tc} ml-2">${g.tag}</span>`:''}
-          <span class="text-[10px] text-gray-600 ml-2">${g.players} · ${g.price}</span>
+          ${g.tag?`<span class="text-xs ${tc} ml-2">${g.tag}</span>`:''}
+          <span class="text-xs text-gray-400 ml-2">${g.players} · ${g.price}</span>
         </div>
         <svg class="arrow w-4 h-4 text-gray-500 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
       </button>
@@ -792,7 +812,7 @@ function renderRecommend() {
         <p class="text-sm text-gray-300">${g.desc}</p>
         <div class="flex items-center gap-3 mt-3">
           <a href="${g.steam}" target="_blank" class="text-xs text-cyan-400 hover:text-cyan-300">View on Steam →</a>
-          <span class="text-[10px] text-gray-600">${g.players} players · ${g.price}</span>
+          <span class="text-xs text-gray-400">${g.players} players · ${g.price}</span>
         </div>
       </div>
     </div>`;
@@ -834,8 +854,8 @@ function renderContent() {
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><span class="text-3xl">▶</span></div>
       </div>
       <div class="p-3"><p class="text-xs font-medium truncate">${v.title}</p>
-      <p class="text-[10px] text-gray-500">${CH_NAMES[v.ch]||v.ch}${v.note?' · '+v.note:''}</p></div>
-    </a>`).join('') : '<p class="text-gray-600 text-sm col-span-3 text-center py-8">No content yet</p>';
+      <p class="text-xs text-gray-500">${CH_NAMES[v.ch]||v.ch}${v.note?' · '+v.note:''}</p></div>
+    </a>`).join('') : '<p class="text-gray-400 text-sm col-span-3 text-center py-8">No content yet</p>';
 }
 
 function updateCountdown() {
@@ -918,7 +938,7 @@ async function searchSteam() {
         <img src="${g.img}" class="w-20 h-12 object-cover rounded-lg flex-shrink-0" loading="lazy" onerror="this.style.display='none'">
         <div class="flex-1 min-w-0">
           <p class="text-sm font-medium truncate">${g.name}</p>
-          <p class="text-[10px] text-gray-500">${g.price || 'ฟรี'}</p>
+          <p class="text-xs text-gray-500">${g.price || 'ฟรี'}</p>
         </div>
         <span class="text-xs text-accent-green flex-shrink-0">เสนอ →</span>
       </div>`).join('');
@@ -963,12 +983,12 @@ function renderSuggestions() {
   const list = getSuggestions();
   const el = document.getElementById('suggest-list');
   if (!list.length) { el.innerHTML = ''; return; }
-  el.innerHTML = '<p class="text-[10px] text-gray-500 mb-2">เกมส์ที่เสนอมา:</p>' + list.slice(0, 10).map(s =>
+  el.innerHTML = '<p class="text-xs text-gray-500 mb-2">เกมส์ที่เสนอมา:</p>' + list.slice(0, 10).map(s =>
     `<div class="flex items-center gap-3 text-sm">
       ${s.img ? `<img src="${s.img}" class="w-12 h-7 object-cover rounded flex-shrink-0" loading="lazy" onerror="this.style.display='none'">` : '<span class="w-1.5 h-1.5 rounded-full bg-accent-green/50 flex-shrink-0"></span>'}
       <span class="text-gray-300 flex-1 truncate">${s.name}</span>
-      ${s.price ? `<span class="text-[10px] text-gray-600">${s.price}</span>` : ''}
-      <span class="text-[10px] text-gray-700">${new Date(s.time).toLocaleTimeString('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'})}</span>
+      ${s.price ? `<span class="text-xs text-gray-400">${s.price}</span>` : ''}
+      <span class="text-xs text-gray-500">${new Date(s.time).toLocaleTimeString('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'})}</span>
     </div>`
   ).join('');
 }
@@ -1031,15 +1051,15 @@ async function submitReport() {
 function renderReports() {
   const reports = getReports();
   const el = document.getElementById('report-list');
-  if (!reports.length) { el.innerHTML = '<p class="text-gray-600 text-sm text-center py-4">ยังไม่มี feedback</p>'; return; }
+  if (!reports.length) { el.innerHTML = '<p class="text-gray-400 text-sm text-center py-4">ยังไม่มี feedback</p>'; return; }
   const typeLabel = { feature:'ฟีเจอร์', bug:'Bug', game:'เกมส์', other:'อื่นๆ' };
   const typeColor = { feature:'text-cyan-400', bug:'text-red-400', game:'text-accent-green', other:'text-gray-400' };
   el.innerHTML = reports.slice(0, 20).map(r => `
     <div class="bg-dark-800/30 rounded-xl border border-dark-600/20 p-3">
       <div class="flex items-center gap-2 mb-1">
-        <span class="text-[10px] ${typeColor[r.type]||'text-gray-400'}">${typeLabel[r.type]||r.type}</span>
-        <span class="text-[10px] text-gray-600">${r.name}</span>
-        <span class="text-[10px] text-gray-700 ml-auto">${new Date(r.time).toLocaleDateString('th-TH',{day:'numeric',month:'short'})}</span>
+        <span class="text-xs ${typeColor[r.type]||'text-gray-400'}">${typeLabel[r.type]||r.type}</span>
+        <span class="text-xs text-gray-400">${r.name}</span>
+        <span class="text-xs text-gray-500 ml-auto">${new Date(r.time).toLocaleDateString('th-TH',{day:'numeric',month:'short'})}</span>
       </div>
       <p class="text-sm text-gray-300">${r.text}</p>
     </div>`).join('');
